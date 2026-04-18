@@ -46,10 +46,10 @@ export default function RootLayout({
                 Workouts
               </Link>
               <Link href="/login" className="hover:text-white">
-                Login
+                Log In
               </Link>
               <Link href="/signup" className="hover:text-white">
-                Signup
+                Sign Up
               </Link>
             </nav>
           </div>
