@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id              String           @id @default(cuid())
+  email           String           @unique
+  exercises       Exercise[]
+  workoutSessions WorkoutSession[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model Exercise {
+  id               String            @id @default(cuid())
+  name             String
+  muscleGroup      String
+  notes            String?
+  userId           String
+  user             User              @relation(fields: [userId], references: [id])
+  workoutExercises WorkoutExercise[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model WorkoutSession {
+  id               String            @id @default(cuid())
+  date             DateTime          @default(now())
+  title            String?
+  notes            String?
+  userId           String
+  user             User              @relation(fields: [userId], references: [id])
+  workoutExercises WorkoutExercise[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model WorkoutExercise {
+  id               String         @id @default(cuid())
+  workoutSessionId String
+  exerciseId       String
+  order            Int
+  notes            String?
+  workoutSession   WorkoutSession @relation(fields: [workoutSessionId], references: [id])
+  exercise         Exercise       @relation(fields: [exerciseId], references: [id])
+  sets             ExerciseSet[]
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+model ExerciseSet {
+  id                String          @id @default(cuid())
+  workoutExerciseId String
+  order             Int
+  weight            Float
+  reps              Int
+  rpe               Float?
+  notes             String?
+  workoutExercise   WorkoutExercise @relation(fields: [workoutExerciseId], references: [id])
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
